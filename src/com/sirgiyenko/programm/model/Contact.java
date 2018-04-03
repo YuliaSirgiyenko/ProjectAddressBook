@@ -3,10 +3,12 @@ package com.sirgiyenko.programm.model;
 public class Contact {
 
     private String name;
-    private int phoneNumber;
+    private int age;
+    private long phoneNumber;
 
-    Contact(String name, int phoneNumber){
+    public Contact(String name, int age, long phoneNumber){
         this.name = name;
+        this.age = age;
         this.phoneNumber = phoneNumber;
     }
 
@@ -14,7 +16,7 @@ public class Contact {
         return name;
     }
 
-    public int getPhoneNumber() {
+    public long getPhoneNumber() {
         return phoneNumber;
     }
 
@@ -25,4 +27,22 @@ public class Contact {
     public void setPhoneNumber(int phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public String toString(){
+        return "Contact{" +
+                "name='" + name + '\'' +
+                ", age='" + age + '\'' +
+                ", phone number='" + phoneNumber + '\'' +
+                '}';
+    }
+
 }
