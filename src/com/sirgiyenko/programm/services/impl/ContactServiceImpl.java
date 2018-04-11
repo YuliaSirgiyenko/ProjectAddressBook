@@ -4,6 +4,7 @@ import com.sirgiyenko.programm.model.Contact;
 import com.sirgiyenko.programm.services.ContactService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ContactServiceImpl implements ContactService {
@@ -32,17 +33,45 @@ public class ContactServiceImpl implements ContactService {
                 break;
             }
         }
-            return searchResult;
-        }
 
-        @Override
-        public void deleteContact(String name) {
+        return searchResult;
+    }
+
+    @Override
+    public void showContact(Contact contact, String name) {
+        if (contact == null) {
+            System.out.println("No contact with name '" + name + "' in address book");
+        } else {
+            System.out.println(contact);
+        }
+    }
+
+    @Override
+    public Contact editContact(Contact contact, String name) {
+        contact.setName(name);
+        return contact;
+    }
+
+    @Override
+    public Contact editContact(Contact contact, int age) {
+        contact.setAge(age);
+        return contact;
+    }
+
+    @Override
+    public Contact editContact(Contact contact, long phoneNumber) {
+        contact.setPhoneNumber(phoneNumber);
+        return contact;
+    }
+
+    @Override
+    public void deleteContact(String name) {
         if (searchContact(name) != null){
             contactList.remove(searchContact(name));
             System.out.println("Contact with name '" + name + "' is successfully deleted");
         } else {
-            System.out.println("No contact with name '" + name + "' in address book");
+            showContact(searchContact(name), name);
         }
-        }
+    }
 
 }

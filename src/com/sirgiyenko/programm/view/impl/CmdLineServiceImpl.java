@@ -1,7 +1,8 @@
 package com.sirgiyenko.programm.view.impl;
 
+import com.sirgiyenko.programm.model.Contact;
 import com.sirgiyenko.programm.services.ContactService;
-import com.sirgiyenko.programm.services.impl.ContactServiceImpl;
+import com.sirgiyenko.programm.services.ValidatorService;
 import com.sirgiyenko.programm.view.CmdLineService;
 
 import java.io.BufferedReader;
@@ -11,11 +12,13 @@ import java.io.InputStreamReader;
 public class CmdLineServiceImpl implements CmdLineService{
 
     private ContactService contactService;
+    private ValidatorService validatorService;
     //Object BufferedReader for reading from console thanks to object new InputStreamReader(System.in).
     private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    public CmdLineServiceImpl(ContactService contactService) {
+    public CmdLineServiceImpl(ContactService contactService, ValidatorService validatorService) {
         this.contactService = contactService;
+        this.validatorService = validatorService;
     }
 
     public static void showMenu() {
@@ -23,7 +26,8 @@ public class CmdLineServiceImpl implements CmdLineService{
         System.out.println("1. Create Contact");
         System.out.println("2. Show all Contact");
         System.out.println("3. Search Contact");
-        System.out.println("4. Delete Contact");
+        System.out.println("4. Edit Contact");
+        System.out.println("5. Delete Contact");
         System.out.println("0. Exit");
     }
 
@@ -46,6 +50,9 @@ public class CmdLineServiceImpl implements CmdLineService{
                     searchContact();
                     break;
                 case "4":
+                    editContact();
+                    break;
+                case "5":
                     deleteContact();
                     break;
                 case "0":
@@ -60,7 +67,7 @@ public class CmdLineServiceImpl implements CmdLineService{
     }
 
     private void deleteContact() throws IOException {
-        System.out.println("Pls., enter name of Contract for search");
+        System.out.println("Pls., enter name of Contact for removal from address book");
         String name = br.readLine();
         contactService.deleteContact(name);
     }
@@ -70,13 +77,50 @@ public class CmdLineServiceImpl implements CmdLineService{
     }
 
     private void searchContact() throws IOException {
-        System.out.println("Pls., enter name of Contract for search");
+        System.out.println("Pls., enter name of Contact for search");
         String name = br.readLine();
+        contactService.showContact(contactService.searchContact(name), name);
+    }
+
+    private void editContact () throws IOException {
+        System.out.println("Pls., enter name of Contact for editing");
+        String name = br.readLine();
+        Contact contact;
+
         if (contactService.searchContact(name) == null) {
-            System.out.println("No contact with name '" + name + "' in address book");
+            contactService.showContact(contactService.searchContact(name), name);
         } else {
-            System.out.println(contactService.searchContact(name));
+            contact = contactService.searchContact(name);
+
+            System.out.println("Do you want to change name (Y/N)");
+            String answer = br.readLine();
+
+            if (answer.equalsIgnoreCase("Y")) {
+                System.out.println("Pls., enter new name");
+                String newName = br.readLine();
+                contact = contactService.editContact(contact, newName);
+            }
+
+            System.out.println("Do you want to change age (Y/N)");
+            answer = br.readLine();
+
+            if (answer.equalsIgnoreCase("Y")) {
+                int newAge = validatorService.readAge();
+                contact = contactService.editContact(contact, newAge);
+            }
+
+            System.out.println("Do you want to change phoneNumber (Y/N)");
+            answer = br.readLine();
+
+            if (answer.equalsIgnoreCase("Y")) {
+                long newPhoneNumber = validatorService.readPhoneNumber();
+                contact = contactService.editContact(contact, newPhoneNumber);
+            }
+
+            System.out.println("Contact after editing " + contact.toString());
+
         }
+
     }
 
     private void createContact() throws IOException {
@@ -87,31 +131,8 @@ public class CmdLineServiceImpl implements CmdLineService{
             System.out.println("Contact with name '" + name + "' has already existed in address book and " +
                     "can't be created again");
         } else {
-
-            System.out.println("Pls., enter age");
-            int age = 0;
-            boolean ageFormat = false;
-            while (!ageFormat) {
-                try {
-                    age = Integer.parseInt(br.readLine());
-                    ageFormat = true;
-                } catch (NumberFormatException e) {
-                    System.out.println("Pls., enter correct age");
-                }
-            }
-
-            System.out.println("Pls., enter phone number");
-            long phoneNumber = 0;
-            boolean phoneFormat = false;
-            while (!phoneFormat) {
-                try {
-                    phoneNumber = Long.parseLong(br.readLine());
-                    phoneFormat = true;
-                } catch (NumberFormatException e) {
-                    System.out.println("Pls., enter correct phone number");
-                }
-            }
-
+            int age = validatorService.readAge();
+            long phoneNumber = validatorService.readPhoneNumber();
             contactService.createContact(name, age, phoneNumber);
         }
 
