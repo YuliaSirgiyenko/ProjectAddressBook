@@ -1,4 +1,4 @@
-package com.sirgiyenko.programm.services;
+package com.sirgiyenko.programm.businessException;
 
 public class IncorrectValueException extends Exception {
 }

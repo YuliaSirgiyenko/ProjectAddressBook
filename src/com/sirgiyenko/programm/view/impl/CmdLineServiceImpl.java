@@ -1,9 +1,11 @@
 package com.sirgiyenko.programm.view.impl;
 
+import com.sirgiyenko.programm.businessException.IncorrectValueException;
 import com.sirgiyenko.programm.model.Contact;
 import com.sirgiyenko.programm.services.ContactService;
-import com.sirgiyenko.programm.services.ValidatorService;
+import com.sirgiyenko.programm.util.ValidatorUtilImpl;
 import com.sirgiyenko.programm.view.CmdLineService;
+import com.sirgiyenko.programm.view.Messages;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,16 +14,14 @@ import java.io.InputStreamReader;
 public class CmdLineServiceImpl implements CmdLineService{
 
     private ContactService contactService;
-    private ValidatorService validatorService;
     //Object BufferedReader for reading from console thanks to object new InputStreamReader(System.in).
     private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    public CmdLineServiceImpl(ContactService contactService, ValidatorService validatorService) {
+    public CmdLineServiceImpl(ContactService contactService) {
         this.contactService = contactService;
-        this.validatorService = validatorService;
     }
 
-    public static void showMenu() {
+    public static void showMainMenu() {
         System.out.println("Pls., choose menu point");
         System.out.println("1. Create Contact");
         System.out.println("2. Show all Contact");
@@ -32,11 +32,11 @@ public class CmdLineServiceImpl implements CmdLineService{
     }
 
     @Override
-    public void runMenu() throws IOException {
+    public void runMainMenu() throws IOException {
         boolean isRunning = true;
 
         while(isRunning) {
-            showMenu();
+            showMainMenu();
             String line = br.readLine();
 
             switch(line){
@@ -67,9 +67,14 @@ public class CmdLineServiceImpl implements CmdLineService{
     }
 
     private void deleteContact() throws IOException {
-        System.out.println("Pls., enter name of Contact for removal from address book");
+        System.out.println(Messages.NAME.getText());
         String name = br.readLine();
-        contactService.deleteContact(name);
+
+        if (contactService.deleteContact(name)){
+            System.out.println("Contact " + name + Messages.REMOVAL.getText());
+        } else {
+            System.out.println(Messages.NOCONTACT.getText());
+        }
     }
 
     private void showContactList(){
@@ -77,65 +82,95 @@ public class CmdLineServiceImpl implements CmdLineService{
     }
 
     private void searchContact() throws IOException {
-        System.out.println("Pls., enter name of Contact for search");
+        System.out.println(Messages.NAME.getText());
         String name = br.readLine();
-        contactService.showContact(contactService.searchContact(name), name);
+        if (contactService.searchContact(name) == null) {
+            System.out.println(Messages.NOCONTACT.getText());
+        } else {
+            System.out.println(contactService.searchContact(name));
+        }
     }
 
     private void editContact () throws IOException {
-        System.out.println("Pls., enter name of Contact for editing");
+        System.out.println(Messages.NAME.getText());
         String name = br.readLine();
-        Contact contact;
+        Contact contact = contactService.searchContact(name);
 
-        if (contactService.searchContact(name) == null) {
-            contactService.showContact(contactService.searchContact(name), name);
+        if (contact == null) {
+            System.out.println(Messages.NOCONTACT.getText());
         } else {
-            contact = contactService.searchContact(name);
-
+            System.out.println(contact);
             System.out.println("Do you want to change name (Y/N)");
-            String answer = br.readLine();
-
-            if (answer.equalsIgnoreCase("Y")) {
+            if (br.readLine().equalsIgnoreCase("Y")) {
                 System.out.println("Pls., enter new name");
                 String newName = br.readLine();
                 contact = contactService.editContact(contact, newName);
             }
 
             System.out.println("Do you want to change age (Y/N)");
-            answer = br.readLine();
-
-            if (answer.equalsIgnoreCase("Y")) {
-                int newAge = validatorService.readAge();
-                contact = contactService.editContact(contact, newAge);
+            if (br.readLine().equalsIgnoreCase("Y")) {
+                int age = readAge();
+                contact = contactService.editContact(contact, age);
             }
 
             System.out.println("Do you want to change phoneNumber (Y/N)");
-            answer = br.readLine();
-
-            if (answer.equalsIgnoreCase("Y")) {
-                long newPhoneNumber = validatorService.readPhoneNumber();
-                contact = contactService.editContact(contact, newPhoneNumber);
+            if (br.readLine().equalsIgnoreCase("Y")){
+                long phoneNumber = readPhoneNumber();
+                contact = contactService.editContact(contact, phoneNumber);
             }
 
-            System.out.println("Contact after editing " + contact.toString());
+            System.out.println("Contact after editing " + contact);
+        }
+    }
 
+    private void createContact() throws IOException {
+        System.out.println(Messages.NAME.getText());
+        String name = br.readLine();
+
+        if (contactService.searchContact(name) != null) {
+            System.out.println("Contact " + name + Messages.NOCREATION.getText());
+        } else {
+            int age = readAge();
+            long phoneNumber = readPhoneNumber();
+            if (contactService.createContact(name, age, phoneNumber)){
+                System.out.println("Contact " + name + Messages.CREATION.getText());
+            }
         }
 
     }
 
-    private void createContact() throws IOException {
-        System.out.println("Pls., enter name");
-        String name = br.readLine();
+    private int readAge() throws IOException {
+        boolean temp = false;
 
-        if (contactService.searchContact(name) != null) {
-            System.out.println("Contact with name '" + name + "' has already existed in address book and " +
-                    "can't be created again");
-        } else {
-            int age = validatorService.readAge();
-            long phoneNumber = validatorService.readPhoneNumber();
-            contactService.createContact(name, age, phoneNumber);
+        System.out.println(Messages.AGE.getText());
+        int age = 0;
+        while (!temp) {
+            try {
+                age = ValidatorUtilImpl.checkAge(br.readLine());
+                temp = true;
+            } catch (NumberFormatException | IncorrectValueException e) {
+                System.out.println(Messages.CORRECTAGE.getText());
+            }
         }
 
+        return age;
+    }
+
+    private long readPhoneNumber() throws IOException {
+        boolean temp = false;
+
+        System.out.println(Messages.PHONENUMBER.getText());
+        long phoneNumber = 0;
+        while (!temp) {
+            try {
+                phoneNumber = ValidatorUtilImpl.checkPhoneNumber(br.readLine());
+                temp = true;
+            } catch (NumberFormatException | IncorrectValueException e) {
+                System.out.println(Messages.CORRECTPHONENMBER.getText());
+            }
+        }
+
+        return phoneNumber;
     }
 
 }
