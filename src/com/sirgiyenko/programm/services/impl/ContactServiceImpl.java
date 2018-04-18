@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/*Realization of Contact Service which use Array List for data keeping.*/
+
 public class ContactServiceImpl implements ContactService {
 
     private List<Contact> contactList = new ArrayList<>();
