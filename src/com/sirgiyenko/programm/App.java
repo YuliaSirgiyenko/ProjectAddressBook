@@ -1,9 +1,9 @@
 package com.sirgiyenko.programm;
 
 import com.sirgiyenko.programm.dao.ContactDao;
-import com.sirgiyenko.programm.dao.impl.FileSystemContactDaoImpl;
+import com.sirgiyenko.programm.dao.impl.DBContactDao;
+import com.sirgiyenko.programm.dao.impl.FileSystemContactDao;
 import com.sirgiyenko.programm.services.ContactService;
-import com.sirgiyenko.programm.services.impl.ContactServiceImpl;
 import com.sirgiyenko.programm.services.impl.FSContactServiceImpl;
 import com.sirgiyenko.programm.view.CmdLineService;
 import com.sirgiyenko.programm.view.impl.CmdLineServiceImpl;
@@ -24,8 +24,13 @@ public class App {
 //        /*Variant 1 - launching of application with saving of data in ArrayList.*/
 //        ContactService contactService = new ContactServiceImpl();
 
-        /*Variant 2 - launching of application with saving of data in file*/
-        ContactDao contactDao = new FileSystemContactDaoImpl();
+//        /*Variant 2 - launching of application with saving of data in file*/
+//        ContactDao contactDao = new FileSystemContactDao();
+
+        /*Variant 3 - launching of application with saving of data in database*/
+        ContactDao contactDao = new DBContactDao();
+
+        //Creation of layers of upper levels.
         ContactService contactService = new FSContactServiceImpl(contactDao);
         CmdLineService cmd = new CmdLineServiceImpl(contactService);
 
