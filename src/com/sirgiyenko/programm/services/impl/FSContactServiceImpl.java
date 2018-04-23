@@ -42,16 +42,16 @@ public class FSContactServiceImpl implements ContactService {
 
     @Override
     public Contact editContact(Contact contact, String name) {
-        return null;
+        return contactDao.editContact(contact, name);
     }
 
     @Override
     public Contact editContact(Contact contact, int age) {
-        return null;
+        return contactDao.editContact(contact, age);
     }
 
     @Override
     public Contact editContact(Contact contact, long phoneNumber) {
-        return null;
+        return contactDao.editContact(contact, phoneNumber);
     }
 }

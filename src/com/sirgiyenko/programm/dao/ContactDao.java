@@ -16,4 +16,8 @@ public interface ContactDao {
     Contact searchContact(String name);
 
     void removeContact(String name);
+
+    Contact editContact(Contact contact, String name);
+    Contact editContact(Contact contact, int age);
+    Contact editContact(Contact contact, long phoneNumber);
 }
