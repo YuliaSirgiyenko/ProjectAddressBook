@@ -103,16 +103,58 @@ public class DBContactDao implements ContactDao {
 
     @Override
     public Contact editContact(Contact contact, String name) {
-        return null;
+
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement st = connection.prepareStatement
+                     ("UPDATE AddressBook SET name = ? WHERE name = ?;");) {
+
+            st.setString(1, name);
+            st.setString(2, contact.getName());
+            st.executeUpdate();
+            contact.setName(name);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return contact;
     }
 
     @Override
     public Contact editContact(Contact contact, int age) {
-        return null;
+
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement st = connection.prepareStatement
+                     ("UPDATE AddressBook SET age = ? WHERE name = ?;");) {
+
+            st.setInt(1, age);
+            st.setString(2, contact.getName());
+            st.executeUpdate();
+            contact.setAge(age);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return contact;
     }
 
     @Override
     public Contact editContact(Contact contact, long phoneNumber) {
-        return null;
+
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement st = connection.prepareStatement
+                     ("UPDATE AddressBook SET phoneNumber = ? WHERE name = ?;");) {
+
+            st.setLong(1, phoneNumber);
+            st.setString(2, contact.getName());
+            st.executeUpdate();
+            contact.setPhoneNumber(phoneNumber);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return contact;
     }
 }
