@@ -67,11 +67,37 @@ public class DBContactDao implements ContactDao {
 
     @Override
     public Contact searchContact(String name) {
-        return null;
+        Contact searchResult = null;
+
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
+             Statement st = connection.createStatement();) {
+
+            ResultSet rs = st.executeQuery("SELECT * FROM AddressBook WHERE name = '" + name + "';");
+            while(rs.next()){
+                searchResult = new Contact(rs.getString("name"), rs.getInt("age"),
+                        rs.getLong("phoneNumber"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return searchResult;
     }
 
     @Override
     public void removeContact(String name) {
+
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement st = connection.prepareStatement
+                     ("DELETE FROM AddressBook WHERE name = ?;");) {
+
+            st.setString(1, name);
+            st.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
