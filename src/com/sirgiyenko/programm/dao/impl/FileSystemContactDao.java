@@ -38,7 +38,7 @@ public class FileSystemContactDao implements ContactDao {
         try(BufferedReader reader = new BufferedReader(new FileReader(FILE))){
             String line;
             if ((line = reader.readLine()) == null) {
-                System.out.println(Messages.EMPTYBOOK.getText());
+                System.out.println(Messages.EMPTY_BOOK.getText());
             } else {
                 while (line != null) {
                     System.out.println(line);

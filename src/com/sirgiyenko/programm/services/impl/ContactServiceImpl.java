@@ -1,12 +1,10 @@
 package com.sirgiyenko.programm.services.impl;
 
-import com.sirgiyenko.programm.dao.ContactDao;
 import com.sirgiyenko.programm.model.Contact;
 import com.sirgiyenko.programm.services.ContactService;
 import com.sirgiyenko.programm.view.Messages;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /*Realization of Contact Service which use Array List for data keeping.*/
@@ -24,7 +22,7 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public void showContactList() {
         if (contactList.isEmpty()) {
-            System.out.println(Messages.EMPTYBOOK.getText());
+            System.out.println(Messages.EMPTY_BOOK.getText());
         } else {
             for (Contact contact : this.contactList) {
                 System.out.println(contact);

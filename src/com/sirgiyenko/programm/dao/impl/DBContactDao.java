@@ -59,6 +59,7 @@ public class DBContactDao implements ContactDao {
                         rs.getLong("phoneNumber"));
                 System.out.println(contact);
             }
+            rs.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -77,6 +78,7 @@ public class DBContactDao implements ContactDao {
                 searchResult = new Contact(rs.getString("name"), rs.getInt("age"),
                         rs.getLong("phoneNumber"));
             }
+            rs.close();
 
         } catch (SQLException e) {
             e.printStackTrace();

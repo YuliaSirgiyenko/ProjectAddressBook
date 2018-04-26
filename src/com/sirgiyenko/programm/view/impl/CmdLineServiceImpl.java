@@ -21,7 +21,7 @@ public class CmdLineServiceImpl implements CmdLineService{
         this.contactService = contactService;
     }
 
-    public static void showMainMenu() {
+    private static void showMainMenu() {
         System.out.println("Pls., choose menu point");
         System.out.println("1. Create Contact");
         System.out.println("2. Show all Contact");
@@ -73,7 +73,7 @@ public class CmdLineServiceImpl implements CmdLineService{
         if (contactService.deleteContact(name)){
             System.out.println("Contact " + name + Messages.REMOVAL.getText());
         } else {
-            System.out.println(Messages.NOCONTACT.getText());
+            System.out.println(Messages.NO_CONTACT.getText());
         }
     }
 
@@ -85,7 +85,7 @@ public class CmdLineServiceImpl implements CmdLineService{
         System.out.println(Messages.NAME.getText());
         String name = br.readLine();
         if (contactService.searchContact(name) == null) {
-            System.out.println(Messages.NOCONTACT.getText());
+            System.out.println(Messages.NO_CONTACT.getText());
         } else {
             System.out.println(contactService.searchContact(name));
         }
@@ -97,7 +97,7 @@ public class CmdLineServiceImpl implements CmdLineService{
         Contact contact = contactService.searchContact(name);
 
         if (contact == null) {
-            System.out.println(Messages.NOCONTACT.getText());
+            System.out.println(Messages.NO_CONTACT.getText());
         } else {
             System.out.println(contact);
             System.out.println("Do you want to change name (Y/N)");
@@ -128,7 +128,7 @@ public class CmdLineServiceImpl implements CmdLineService{
         String name = br.readLine();
 
         if (contactService.searchContact(name) != null) {
-            System.out.println("Contact " + name + Messages.NOCREATION.getText());
+            System.out.println("Contact " + name + Messages.NO_CREATION.getText());
         } else {
             int age = readAge();
             long phoneNumber = readPhoneNumber();
@@ -149,7 +149,7 @@ public class CmdLineServiceImpl implements CmdLineService{
                 age = ValidatorUtilImpl.checkAge(br.readLine());
                 temp = true;
             } catch (NumberFormatException | IncorrectValueException e) {
-                System.out.println(Messages.CORRECTAGE.getText());
+                System.out.println(Messages.CORRECT_AGE.getText());
             }
         }
 
@@ -159,14 +159,14 @@ public class CmdLineServiceImpl implements CmdLineService{
     private long readPhoneNumber() throws IOException {
         boolean temp = false;
 
-        System.out.println(Messages.PHONENUMBER.getText());
+        System.out.println(Messages.PHONE_NUMBER.getText());
         long phoneNumber = 0;
         while (!temp) {
             try {
                 phoneNumber = ValidatorUtilImpl.checkPhoneNumber(br.readLine());
                 temp = true;
             } catch (NumberFormatException | IncorrectValueException e) {
-                System.out.println(Messages.CORRECTPHONENMBER.getText());
+                System.out.println(Messages.CORRECT_PHONE_NUMBER.getText());
             }
         }
 

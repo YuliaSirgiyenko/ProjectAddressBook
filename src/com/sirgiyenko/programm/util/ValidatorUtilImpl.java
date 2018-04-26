@@ -8,7 +8,7 @@ public class ValidatorUtilImpl {
     private ValidatorUtilImpl(){
     }
 
-    public static int checkAge(String age) throws IOException, IncorrectValueException {
+    public static int checkAge(String age) throws IncorrectValueException {
         int ageInteger = Integer.parseInt(age);
         if (ageInteger <= 0 || ageInteger >= 90) {
             throw new IncorrectValueException();
@@ -16,7 +16,7 @@ public class ValidatorUtilImpl {
         return ageInteger;
     }
 
-    public static long checkPhoneNumber(String phoneNumber) throws IOException, IncorrectValueException {
+    public static long checkPhoneNumber(String phoneNumber) throws IncorrectValueException {
         long phoneNumberLong = Long.parseLong(phoneNumber);
         if (phoneNumberLong < 100) {
             throw new IncorrectValueException();
