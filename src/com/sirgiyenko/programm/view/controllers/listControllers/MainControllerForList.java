@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 public class MainControllerForList {
 
     private ContactService contactService;
+    private Contact tempContact;
 
     public MainControllerForList() {
         this.contactService = new ContactServiceImplFX();
@@ -71,6 +72,12 @@ public class MainControllerForList {
     private Button searchButton;
 
     @FXML
+    private Button searchAndEditButton;
+
+    @FXML
+    private Button editButton;
+
+    @FXML
     private TextArea resultMessage;
 
     @FXML
@@ -83,15 +90,19 @@ public class MainControllerForList {
         inputName.clear();
 
         textAge.setVisible(true);
+        textAge.setText("Insert age");
         inputAge.setVisible(true);
         inputAge.clear();
 
         textPhoneNumber.setVisible(true);
+        textPhoneNumber.setText("Insert phone number");
         inputPhoneNumber.setVisible(true);
         inputPhoneNumber.clear();
 
         createButton.setVisible(true);
         searchButton.setVisible(false);
+        searchAndEditButton.setVisible(false);
+        editButton.setVisible(false);
         resultMessage.setVisible(false);
 
         contactTable.getSelectionModel().clearSelection();
@@ -119,6 +130,8 @@ public class MainControllerForList {
         searchContactButton.setDisable(false);
         deleteContactButton.setDisable(false);
         searchButton.setVisible(false);
+        searchAndEditButton.setVisible(false);
+        editButton.setVisible(false);
 
         resultMessage.setVisible(false);
     }
@@ -130,8 +143,15 @@ public class MainControllerForList {
         inputName.clear();
         inputName.setVisible(true);
 
+        textAge.setVisible(false);
+        inputAge.setVisible(false);
+        textPhoneNumber.setVisible(false);
+        inputPhoneNumber.setVisible(false);
+
         searchButton.setVisible(true);
         deleteButton.setVisible(false);
+        searchAndEditButton.setVisible(false);
+        editButton.setVisible(false);
         resultMessage.setVisible(false);
 
         contactTable.getSelectionModel().clearSelection();
@@ -163,8 +183,16 @@ public class MainControllerForList {
         inputName.clear();
         inputName.setVisible(true);
 
+        textAge.setVisible(false);
+        inputAge.setVisible(false);
+        textPhoneNumber.setVisible(false);
+        inputPhoneNumber.setVisible(false);
+
         deleteButton.setVisible(true);
         contactTable.getSelectionModel().clearSelection();
+        searchAndEditButton.setVisible(false);
+        searchButton.setVisible(false);
+        editButton.setVisible(false);
         resultMessage.setVisible(false);
     }
 
@@ -176,7 +204,6 @@ public class MainControllerForList {
             resultMessage.setVisible(true);
             resultMessage.setText("There is no contact with name '" + name + "' in address book.");
         } else {
-            initialize();
             if (contactService.getBookSize() == 0) {
                 textMessage.setText("Contact with name '" + name + "' was removed. Currenty no " +
                         "contacts in adress book, only \"Create contact\" option is available.");
@@ -194,6 +221,68 @@ public class MainControllerForList {
                 resultMessage.setText("Contact with name '" + name + "' was removed.");
             }
         }
+    }
+
+    @FXML
+    public void editContact(){
+        textName.setText("Insert name for search and editing");
+        textName.setVisible(true);
+        inputName.clear();
+        inputName.setVisible(true);
+
+        searchAndEditButton.setVisible(true);
+        searchButton.setVisible(false);
+        deleteButton.setVisible(false);
+        resultMessage.setVisible(false);
+
+        contactTable.getSelectionModel().clearSelection();
+    }
+
+    @FXML
+    public void SearchAndEditButton(){
+        String name = inputName.getText();
+        Contact searchResult = contactService.searchContact(name);
+        if (searchResult == null) {
+            resultMessage.setVisible(true);
+            resultMessage.setText("There is no contact with name '" + name + "' in address book.");
+            contactTable.getSelectionModel().clearSelection();
+        } else {
+            for (int i = 0; i <contactService.getBookSize(); i++) {
+                if (columnName.getCellData(i).equals(name)) {
+                    contactTable.getSelectionModel().select(i);
+                };
+            }
+            tempContact = searchResult;
+
+            textName.setVisible(true);
+            textName.setText("UPDATE name");
+            inputName.setVisible(true);
+            inputName.setText(searchResult.getName());
+
+            textAge.setVisible(true);
+            textAge.setText("UPDATE age");
+            inputAge.setVisible(true);
+            inputAge.setText(Integer.toString(searchResult.getAge()));
+
+            textPhoneNumber.setVisible(true);
+            textPhoneNumber.setText("UPDATE phone number");
+            inputPhoneNumber.setVisible(true);
+            inputPhoneNumber.setText(Long.toString(searchResult.getPhoneNumber()));
+
+            searchAndEditButton.setVisible(false);
+            editButton.setVisible(true);
+        }
+    }
+
+    @FXML
+    public void edit(){
+        String newName = inputName.getText();
+        tempContact = contactService.editContact(tempContact, newName);
+        String newAge = inputAge.getText();
+        contactService.editContact(tempContact, new Integer(newAge));
+        String newPhoneNumber = inputPhoneNumber.getText();
+        contactService.editContact(tempContact, new Long(newPhoneNumber));
+        contactTable.refresh();
     }
 
     @FXML

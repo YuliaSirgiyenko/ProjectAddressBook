@@ -31,7 +31,7 @@
          <font>
             <Font size="14.0" />
          </font></Button>
-        <Button fx:id="editContactButton" disable="true" layoutX="34.0" layoutY="71.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" text="Edit Contact">
+        <Button fx:id="editContactButton" disable="true" layoutX="34.0" layoutY="71.0" mnemonicParsing="false" onAction="#editContact" prefHeight="25.0" prefWidth="118.0" text="Edit Contact">
          <font>
             <Font size="14.0" />
          </font></Button>
@@ -49,10 +49,12 @@
       <Label fx:id="textName" layoutX="256.0" layoutY="23.0" text="Insert name" visible="false" />
       <Label fx:id="textAge" layoutX="256.0" layoutY="72.0" text="Insert age" visible="false" />
       <Label fx:id="textPhoneNumber" layoutX="256.0" layoutY="121.0" text="Insert phone number" visible="false" />
-      <Button fx:id="createButton" layoutX="342.0" layoutY="197.0" mnemonicParsing="false" onAction="#create" text="Create" visible="false" />
+      <Button fx:id="createButton" layoutX="342.0" layoutY="185.0" mnemonicParsing="false" onAction="#create" text="Create" visible="false" />
       <TextArea fx:id="textMessage" layoutX="207.0" layoutY="23.0" prefHeight="46.0" prefWidth="358.0" text="Currently no contacts in Address Book. Only &quot;Create Contact&quot; option is available." wrapText="true" />
       <Button fx:id="searchButton" layoutX="342.0" layoutY="104.0" mnemonicParsing="false" onAction="#search" text="Search" visible="false" />
       <TextArea fx:id="resultMessage" layoutX="207.0" layoutY="162.0" prefHeight="55.0" prefWidth="336.0" visible="false" />
       <Button fx:id="deleteButton" layoutX="342.0" layoutY="104.0" mnemonicParsing="false" onAction="#delete" text="Delete" visible="false" />
+      <Button fx:id="searchAndEditButton" layoutX="322.0" layoutY="104.0" mnemonicParsing="false" onAction="#SearchAndEditButton" prefHeight="25.0" prefWidth="106.0" text="Search and Edit" visible="false" />
+      <Button fx:id="editButton" layoutX="342.0" layoutY="185.0" mnemonicParsing="false" onAction="#edit" text="Edit" visible="false" />
     </children>
 </AnchorPane>
