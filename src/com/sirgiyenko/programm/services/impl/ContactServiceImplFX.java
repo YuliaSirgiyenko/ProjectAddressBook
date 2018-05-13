@@ -3,16 +3,30 @@ package com.sirgiyenko.programm.services.impl;
 import com.sirgiyenko.programm.model.Contact;
 import com.sirgiyenko.programm.services.ContactService;
 import com.sirgiyenko.programm.view.Messages;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.ArrayList;
-import java.util.List;
+public class ContactServiceImplFX implements ContactService {
 
-/*Realization of Contact Service which use Array List for data keeping.*/
+    private ObservableList<Contact> contactList;
 
-public class ContactServiceImpl implements ContactService {
+    public ContactServiceImplFX(){
+        this.contactList = FXCollections.observableArrayList();
+    }
 
-    private List<Contact> contactList = new ArrayList<>();
+    @Override
+    public int getBookSize(){
+        int i = 0;
+        for (Contact contact : this.contactList) {
+            i++;
+            }
+        return i;
+    }
+
+    @Override
+    public ObservableList<Contact> showContactsFX() {
+        return contactList;
+    }
 
     @Override
     public boolean createContact(String name, int age, long phoneNumber) {
@@ -21,20 +35,8 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
+    /*Not realized for FX realization.*/
     public void showContactList() {
-        if (contactList.isEmpty()) {
-            System.out.println(Messages.EMPTY_BOOK.getText());
-        } else {
-            for (Contact contact : this.contactList) {
-                System.out.println(contact);
-            }
-        }
-    }
-
-    @Override
-    /*Not used for realization via console.*/
-    public ObservableList showContactsFX() {
-        return null;
     }
 
     @Override
@@ -69,12 +71,6 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    /*Not used for realization via console.*/
-    public int getBookSize() {
-        return 0;
-    }
-
-    @Override
     public boolean deleteContact(String name) {
         boolean flag = false;
         if (searchContact(name) != null){
@@ -83,5 +79,6 @@ public class ContactServiceImpl implements ContactService {
         }
         return flag;
     }
+
 
 }

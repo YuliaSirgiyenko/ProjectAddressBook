@@ -3,6 +3,8 @@ package com.sirgiyenko.programm.services.impl;
 import com.sirgiyenko.programm.dao.ContactDao;
 import com.sirgiyenko.programm.model.Contact;
 import com.sirgiyenko.programm.services.ContactService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /*Realization of Contact Service which use File System for data keeping.*/
 
@@ -17,6 +19,7 @@ public class FSContactServiceImpl implements ContactService {
     @Override
     public boolean createContact(String name, int age, long phoneNumber) {
         contactDao.saveContact(new Contact(name, age, phoneNumber));
+        showContactList();
         return true;
     }
 
@@ -33,6 +36,12 @@ public class FSContactServiceImpl implements ContactService {
     @Override
     public void showContactList() {
         contactDao.showContactList();
+    }
+
+    @Override
+    /*Not used for realization via console.*/
+    public ObservableList showContactsFX() {
+        return null;
     }
 
     @Override
@@ -53,5 +62,11 @@ public class FSContactServiceImpl implements ContactService {
     @Override
     public Contact editContact(Contact contact, long phoneNumber) {
         return contactDao.editContact(contact, phoneNumber);
+    }
+
+    @Override
+    /*Not used for realization via console.*/
+    public int getBookSize() {
+        return 0;
     }
 }
