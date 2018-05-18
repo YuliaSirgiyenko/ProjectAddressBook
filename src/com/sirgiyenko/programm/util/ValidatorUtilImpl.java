@@ -8,6 +8,15 @@ public class ValidatorUtilImpl {
     private ValidatorUtilImpl(){
     }
 
+    public static boolean notNullStringLine(String line) {
+        boolean result = false;
+        String temp = line.trim();
+        if (temp.isEmpty()) {
+            result = true;
+        }
+        return result;
+    }
+
     public static int checkAge(String age) throws IncorrectValueException {
         int ageInteger = Integer.parseInt(age);
         if (ageInteger <= 0 || ageInteger >= 90) {
