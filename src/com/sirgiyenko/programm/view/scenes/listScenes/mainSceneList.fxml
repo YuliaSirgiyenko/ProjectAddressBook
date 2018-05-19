@@ -55,6 +55,6 @@
       <TextArea fx:id="resultMessage" layoutX="182.0" layoutY="209.0" prefHeight="49.0" prefWidth="411.0" visible="false" />
       <Button fx:id="deleteButton" layoutX="342.0" layoutY="104.0" mnemonicParsing="false" onAction="#delete" text="Delete" visible="false" />
       <Button fx:id="searchAndEditButton" layoutX="322.0" layoutY="104.0" mnemonicParsing="false" onAction="#SearchAndEditButton" prefHeight="25.0" prefWidth="106.0" text="Search and Edit" visible="false" />
-      <Button fx:id="editButton" layoutX="342.0" layoutY="185.0" mnemonicParsing="false" onAction="#edit" text="Edit" visible="false" />
+      <Button fx:id="editButton" layoutX="342.0" layoutY="175.0" mnemonicParsing="false" onAction="#edit" text="Edit" visible="false" />
     </children>
 </AnchorPane>

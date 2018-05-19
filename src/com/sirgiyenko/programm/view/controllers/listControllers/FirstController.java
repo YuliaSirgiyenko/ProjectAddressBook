@@ -7,14 +7,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-public class FirstControllerForList {
+public class FirstController {
 
     @FXML
-    private Button runButton;
+    private Button runListButton;
 
     @FXML
-    public void setRunButton(){
-        Stage stage = (Stage) runButton.getScene().getWindow();
+    private Button runDbButton;
+
+    @FXML
+    public void setRunListButton(){
+        Stage stage = (Stage) runListButton.getScene().getWindow();
         stage.close();
 
         try {

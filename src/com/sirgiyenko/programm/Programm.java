@@ -15,7 +15,7 @@ public class Programm extends Application {
 
         try {
             /*Variant 1 - graphic realization for List.*/
-            Parent root = FXMLLoader.load(getClass().getResource("view/scenes/listScenes/firstSceneList.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("view/scenes/listScenes/firstScene.fxml"));
 
 //        /*Variant 2 - graphic realization for DB.*/
 //        Parent root = FXMLLoader.load(getClass().getResource("view/scenes/mainScene.fxml"));

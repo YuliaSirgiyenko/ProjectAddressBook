@@ -4,7 +4,7 @@ public enum Messages {
     
     NAME("Pls, enter name"),
     CORRECT_NAME("Pls, enter correct name"),
-    IMPOSSIBLE_NAME("Field name is empty. NO NAME contact can't be created."),
+    IMPOSSIBLE_NAME("Field name is empty."),
     AGE("Pls., enter age"),
     CORRECT_AGE("Pls., enter correct age (between 1 and 90 years)"),
     PHONE_NUMBER("Pls., enter phone number"),

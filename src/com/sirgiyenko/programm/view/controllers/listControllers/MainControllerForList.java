@@ -87,8 +87,6 @@ public class MainControllerForList {
 
     @FXML
     public void createContact(){
-        textMessage.setVisible(false);
-
         textName.setVisible(true);
         textName.setText("Insert name");
         textName.setTextFill(Color.BLACK);
@@ -111,6 +109,8 @@ public class MainControllerForList {
         searchButton.setVisible(false);
         searchAndEditButton.setVisible(false);
         editButton.setVisible(false);
+
+        textMessage.setVisible(false);
         resultMessage.setVisible(false);
 
         contactTable.getSelectionModel().clearSelection();
@@ -234,7 +234,7 @@ public class MainControllerForList {
     @FXML
     public void search(){
         String name = inputName.getText();
-        Contact searchResult = contactService.searchContact(name);
+        Contact searchResult = contactService.searchContact(name.trim());
         if (searchResult == null) {
             resultMessage.setVisible(true);
             resultMessage.setText("There is no contact with name '" + name + "' in address book.");
@@ -275,7 +275,7 @@ public class MainControllerForList {
     @FXML
     public void delete(){
         String name = inputName.getText();
-        boolean deleteResult = contactService.deleteContact(name);
+        boolean deleteResult = contactService.deleteContact(name.trim());
         if (!deleteResult) {
             resultMessage.setVisible(true);
             resultMessage.setText("There is no contact with name '" + name + "' in address book.");
@@ -340,19 +340,19 @@ public class MainControllerForList {
             tempContact = searchResult;
 
             textName.setVisible(true);
-            textName.setText("UPDATE name");
+            textName.setText("Insert name");
             textName.setTextFill(Color.BLACK);
             inputName.setVisible(true);
             inputName.setText(searchResult.getName());
 
             textAge.setVisible(true);
-            textAge.setText("UPDATE age");
+            textAge.setText("Insert age");
             textAge.setTextFill(Color.BLACK);
             inputAge.setVisible(true);
             inputAge.setText(Integer.toString(searchResult.getAge()));
 
             textPhoneNumber.setVisible(true);
-            textPhoneNumber.setText("UPDATE phone number");
+            textPhoneNumber.setText("Insert phone number");
             inputPhoneNumber.setVisible(true);
             inputPhoneNumber.setText(Long.toString(searchResult.getPhoneNumber()));
 
@@ -362,13 +362,62 @@ public class MainControllerForList {
     }
 
     @FXML
-    public void edit(){
+    public void edit() throws IOException {
+        boolean dataValid = true;
+
+        String oldName = tempContact.getName();
         String newName = inputName.getText();
-        tempContact = contactService.editContact(tempContact, newName);
-        String newAge = inputAge.getText();
-        contactService.editContact(tempContact, new Integer(newAge));
-        String newPhoneNumber = inputPhoneNumber.getText();
-        contactService.editContact(tempContact, new Long(newPhoneNumber));
+        if (ValidatorUtilImpl.notNullStringLine(newName)){
+            dataValid = false;
+            resultMessage.setVisible(true);
+            resultMessage.setText(Messages.IMPOSSIBLE_NAME.getText());
+            textName.setText(Messages.CORRECT_NAME.getText());
+            textName.setTextFill(Color.RED);
+        }
+
+        if (contactService.searchContact(newName) != null && !newName.equals(oldName)) {
+            dataValid = false;
+            resultMessage.setVisible(true);
+            resultMessage.setText("Contact " + newName + Messages.NO_CREATION.getText());
+            textName.setText(Messages.CORRECT_NAME.getText());
+            textName.setTextFill(Color.RED);
+        }
+
+        if (dataValid) {
+            tempContact = contactService.editContact(tempContact, newName.trim());
+            resultMessage.setVisible(false);
+            textName.setText("Insert name");
+            textName.setTextFill(Color.BLACK);
+        }
+
+        dataValid = true;
+        if (!readAge()) {
+            dataValid = false;
+            textAge.setText(Messages.CORRECT_AGE.getText());
+            textAge.setTextFill(Color.RED);
+        }
+
+        if (dataValid) {
+            String newAge = inputAge.getText();
+            contactService.editContact(tempContact, new Integer(newAge));
+            textAge.setText("Insert age");
+            textAge.setTextFill(Color.BLACK);
+        }
+
+        dataValid = true;
+        if (!readPhoneNumber()) {
+            dataValid = false;
+            textPhoneNumber.setText(Messages.CORRECT_PHONE_NUMBER.getText());
+            textPhoneNumber.setTextFill(Color.RED);
+        }
+
+        if(dataValid) {
+            String newPhoneNumber = inputPhoneNumber.getText();
+            contactService.editContact(tempContact, new Long(newPhoneNumber));
+            textPhoneNumber.setText("Insert phone number");
+            textPhoneNumber.setTextFill(Color.BLACK);
+        }
+
         contactTable.refresh();
     }
 
