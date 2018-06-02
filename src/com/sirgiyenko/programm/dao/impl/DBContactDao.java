@@ -4,6 +4,8 @@ import com.sirgiyenko.programm.dao.ContactDao;
 import com.sirgiyenko.programm.model.Contact;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBContactDao implements ContactDao {
 
@@ -49,20 +51,23 @@ public class DBContactDao implements ContactDao {
     }
 
     @Override
-    public void showContactList() {
+    public List<Contact> showContactList() {
         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
-             Statement st = connection.createStatement();) {
-
-            ResultSet rs = st.executeQuery("SELECT * FROM AddressBook;");
-            while(rs.next()){
-                Contact contact = new Contact(rs.getString("name"), rs.getInt("age"),
-                        rs.getLong("phoneNumber"));
-                System.out.println(contact);
+             Statement st = connection.createStatement()) {
+            List<Contact> clients = new ArrayList<>();
+            try (ResultSet resultSet = st.executeQuery("SELECT * FROM AddressBook;")) {
+                while (resultSet.next()) {
+                    String name = resultSet.getString("name");
+                    int age = resultSet.getInt("age");
+                    long phoneNumber = resultSet.getLong("phoneNumber");
+                    clients.add(new Contact(name, age, phoneNumber));
+                }
             }
-            rs.close();
-
-        } catch (SQLException e) {
+            return clients;
+        }
+        catch (SQLException e) {
             e.printStackTrace();
+            return new ArrayList<>();
         }
     }
 

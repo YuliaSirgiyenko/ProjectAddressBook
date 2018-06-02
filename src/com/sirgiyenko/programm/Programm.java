@@ -14,12 +14,7 @@ public class Programm extends Application {
     public void start(Stage primaryStage) {
 
         try {
-            /*Variant 1 - graphic realization for List.*/
-            Parent root = FXMLLoader.load(getClass().getResource("view/scenes/listScenes/firstScene.fxml"));
-
-//        /*Variant 2 - graphic realization for DB.*/
-//        Parent root = FXMLLoader.load(getClass().getResource("view/scenes/mainScene.fxml"));
-
+            Parent root = FXMLLoader.load(getClass().getResource("view/scenes/firstScene.fxml"));
             primaryStage.setTitle("Contact Book");
             primaryStage.setScene(new Scene(root));
             primaryStage.setResizable(false);

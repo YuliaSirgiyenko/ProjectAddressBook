@@ -1,9 +1,10 @@
-package com.sirgiyenko.programm.view.controllers.listControllers;
+package com.sirgiyenko.programm.view.controllers;
 
 import com.sirgiyenko.programm.businessException.IncorrectValueException;
+import com.sirgiyenko.programm.dao.impl.DBContactDao;
 import com.sirgiyenko.programm.model.Contact;
 import com.sirgiyenko.programm.services.ContactService;
-import com.sirgiyenko.programm.services.impl.ContactServiceImplFX;
+import com.sirgiyenko.programm.services.impl.FScontactServiceImplFX;
 import com.sirgiyenko.programm.util.ValidatorUtilImpl;
 import com.sirgiyenko.programm.view.Messages;
 import javafx.fxml.FXML;
@@ -13,13 +14,13 @@ import javafx.scene.paint.Color;
 
 import java.io.IOException;
 
-public class MainControllerForList {
+public class MainControllerForDb {
 
     private ContactService contactService;
     private Contact tempContact;
 
-    public MainControllerForList() {
-        this.contactService = new ContactServiceImplFX();
+    public MainControllerForDb() {
+        this.contactService = new FScontactServiceImplFX(new DBContactDao());
     }
 
     @FXML
@@ -113,11 +114,13 @@ public class MainControllerForList {
         textMessage.setVisible(false);
         resultMessage.setVisible(false);
 
+        deleteButton.setVisible(false);
+
         contactTable.getSelectionModel().clearSelection();
     }
 
     @FXML
-    public void create() throws IOException{
+    public void create() throws IOException {
         boolean dataValid = true;
 
         textName.setText("Insert name");
@@ -294,9 +297,12 @@ public class MainControllerForList {
                 deleteButton.setVisible(false);
                 resultMessage.setVisible(false);
             } else {
+                resultMessage.setVisible(true);
                 resultMessage.setText("Contact with name '" + name + "' was removed.");
+                inputName.clear();
             }
         }
+        initialize();
     }
 
     @FXML
@@ -418,6 +424,7 @@ public class MainControllerForList {
             textPhoneNumber.setTextFill(Color.BLACK);
         }
 
+        initialize();
         contactTable.refresh();
     }
 
@@ -427,6 +434,21 @@ public class MainControllerForList {
         columnAge.setCellValueFactory(new PropertyValueFactory<>("age"));
         columnPhoneNumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         contactTable.setItems(contactService.showContactsFX());
+
+        if (contactService.getBookSize() == 0) {
+            textMessage.setText("Currenty no " +
+                    "contacts in adress book, only \"Create contact\" option is available.");
+            textMessage.setVisible(true);
+
+            inputName.setVisible(false);
+            textName.setVisible(false);
+
+            searchContactButton.setDisable(true);
+            editContactButton.setDisable(true);
+            deleteContactButton.setDisable(true);
+            deleteButton.setVisible(false);
+            resultMessage.setVisible(false);
+        }
     }
 
 }

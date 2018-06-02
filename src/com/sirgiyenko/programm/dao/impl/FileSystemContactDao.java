@@ -5,6 +5,7 @@ import com.sirgiyenko.programm.model.Contact;
 import com.sirgiyenko.programm.view.Messages;
 
 import java.io.*;
+import java.util.List;
 
 public class FileSystemContactDao implements ContactDao {
 
@@ -33,22 +34,27 @@ public class FileSystemContactDao implements ContactDao {
     }
 
     @Override
-    public void showContactList() {
-
-        try(BufferedReader reader = new BufferedReader(new FileReader(FILE))){
-            String line;
-            if ((line = reader.readLine()) == null) {
-                System.out.println(Messages.EMPTY_BOOK.getText());
-            } else {
-                while (line != null) {
-                    System.out.println(line);
-                    line = reader.readLine();
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public List<Contact> showContactList() {
+        return null;
     }
+
+//    @Override
+//    public void showContactList() {
+//
+//        try(BufferedReader reader = new BufferedReader(new FileReader(FILE))){
+//            String line;
+//            if ((line = reader.readLine()) == null) {
+//                System.out.println(Messages.EMPTY_BOOK.getText());
+//            } else {
+//                while (line != null) {
+//                    System.out.println(line);
+//                    line = reader.readLine();
+//                }
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     public Contact searchContact(String name) {
